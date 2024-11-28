@@ -1,68 +1,41 @@
 <script setup>
-import {ref} from 'vue'
+import { reactive } from 'vue';
+import cabecalho from './components/cabecalho.vue'
+import resultado from './components/resultado.vue'
+import Operacao from './components/operacao.vue';
 
-const campo1 = ref('')
+const estado = reactive({
+    operation: '+',
+    num1: '',
+    num2: '',
+})
 
-
+const resultado = ()=> {
+    const {operation} = estado
+    switch(operation) {
+        case '-':
+        return parseFloat(estado.num1) - parseFloat(estado.num2)
+        case '*':
+        return parseFloat(estado.num1) * parseFloat(estado.num2)
+        case '/':
+        return parseFloat(estado.num1) / parseFloat(estado.num2)
+        default:
+        return parseFloat(estado.num1) + parseFloat(estado.num2)
+    }
+}
 
 </script>
+<style>
 
-
-<template>
-<div class="container pt-1 mb-4 mt-4 bg-light rounded-3">
-    
-
-    <div id="campo1">
-        <h3>Primeiro Número</h3>
-        <input type="number" placeholder="digite o segundo número">
-        
-    </div>
-    
-    <div id="campo2">
-        <h3>Segundo Número</h3>
-        <input type="number" placeholder="digite o segundo número">
-    </div>
-    
-    <div id="operacoes" class="col-7">
-        <select class="form-control">
-        <option value="divisao">divisão (/)</option>
-        <option value="multiplicacao">multiplicação (*)</option>
-        <option value="adicao">adição (+)</option>
-        <option value="subtracao">subtração (-)</option>
-        <option value="porcentagem">porcentagem (%)</option>
-    </select>
-    </div>
-
-</div>
-</template>
-
-
-
-
-<style scoped>
-h1 {
-    text-align: center;
-    margin-top:200px ;
-}
-
-#campo1 {
-    text-align: center;
-    padding-top: 70px;
-    padding-bottom: 70px ;
-}
-#campo2 {
-    text-align: center;
-}
-input {
-    background-color: aliceblue;
-    color: black;
-}
-#operacoes {
-    font-family: 'Courier New', Courier, monospace;
-    padding-top: 60px;
-    
-    padding-bottom: 90px;
-    padding-left: 350px;
-}
 
 </style>
+
+<template>
+    <body>
+        <div class="container">
+            <cabecalho/>
+            <Operacao :operacao="evento=> estado.operation = evento.target.value" :num1="evento => estado.num1 = evento.target.value" :num2="evento => estado.num2 = evento.target.value"></Operacao>
+            <resultado :num1="estado.num1" :num2="estado.num2" :result="resultado()"/>
+        </div>
+    </body>
+</template>
